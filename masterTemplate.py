@@ -16,7 +16,6 @@ class MasterFrame(wx.Frame):
     """
     A Frame with menu bar and output panel
     """
-
     def __init__(self, *args, **kw):
         # ensure the parent's __init__ is called
         super(MasterFrame, self).__init__(*args, **kw)
