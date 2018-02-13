@@ -1,4 +1,4 @@
-#!/bin/python
+#!usr/bin/python
 
 __author__ = 'pstragie'
 __company__ = 'PWS'
