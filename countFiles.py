@@ -11,6 +11,13 @@ class CountFiles(wx.Panel):
         """Constructor"""
         wx.Panel.__init__(self, parent=parent)
 
+        # self.frame = wx.Frame(None, -1, title='Redirect Test', size=(620,450), style=wx.STAY_ON_TOP | wx.DEFAULT_FRAME_STYLE)
+        panel = wx.lib.scrolledpanel.ScrolledPanel(self, -1, pos=(25, 260), size=(505, 155), style=wx.BORDER_RAISED)
+        panel.SetupScrolling()
+
+        self.log = wx.TextCtrl(panel, -1, size=(500, 150), style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+        redir = RedirectText(self.log)
+        sys.stdout = redir
 
         # put some text in it
         info = wx.StaticText(self, label="This script allows you to count the number of files in the chosen folder.", pos=(25, 15))
@@ -41,13 +48,6 @@ class CountFiles(wx.Panel):
         fold = wx.StaticText(self, label=chosendirectory, pos=(25, 200))
         total = wx.StaticText(self, label=counttxt, pos=(25, 220))
 
-        #self.frame = wx.Frame(None, -1, title='Redirect Test', size=(620,450), style=wx.STAY_ON_TOP | wx.DEFAULT_FRAME_STYLE)
-        panel = wx.lib.scrolledpanel.ScrolledPanel(self, -1, pos=(25, 260), size=(505, 155), style=wx.BORDER_RAISED)
-        panel.SetupScrolling()
-
-        self.log = wx.TextCtrl(panel, -1, size=(500, 150), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
-        redir = RedirectText(self.log)
-        sys.stdout = redir
         for (dirpath, dirnames, filenames) in os.walk(chosendirectory):
             for fn in filenames:
                 name, ext = os.path.splitext(fn)
