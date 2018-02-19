@@ -197,10 +197,6 @@ class MasterPanel(wx.Panel):
         font = font.Bold()
         txt.SetFont(font)
 
-        print(st)
-        print(txt)
-
-
 if __name__ == '__main__':
     # When this module is run (not imported) then create the app, the
     # frame, show it, and start the event loop.

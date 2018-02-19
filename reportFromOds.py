@@ -24,51 +24,46 @@ class ReadFromOds(wx.Panel):
         sys.stdout = redir
 
         # put some text in it
-        info = wx.StaticText(self, label="This script will summarize all excel files in a folder.", pos=(25, 15))
+        info = wx.StaticText(self, label="This script will summarize all ods files in a folder.", pos=(25, 15))
         kiesFolder = wx.StaticText(self, label="Kies folder", pos=(25, 40))
         dirSelectorPromptStr = "Kies folder"
         DIRP_DEFAULT_STYLE = wx.DIRP_DIR_MUST_EXIST
         DirPickerCtrlNameStr = "test Picker"
         self.chosenfolder = wx.DirPickerCtrl(self, id=1, path="", message=dirSelectorPromptStr, pos=(25, 70), style=DIRP_DEFAULT_STYLE, name=DirPickerCtrlNameStr)
-        kiesExtensie = wx.StaticText(self, label="Kies of extensie of laat leeg voor alle extensies", pos=(25, 100))
-        self.chosenext = wx.TextCtrl(self, pos=(25, 130))
 
         self.button = wx.Button(self, label="Run script", pos=(25, 170))
         self.Bind(wx.EVT_BUTTON, self.onButton)
 
     def onButton(self, event):
         chosenfolder = self.chosenfolder.GetPath()
-        chosenext = self.chosenext.GetValue()
         if chosenfolder == "":
             chosendirectory = os.getcwd()
         else:
             chosendirectory = chosenfolder
         count = 0
+        print("Path: ", chosenfolder)
         for (dp, dn, fn) in os.walk(chosendirectory):
             for f in fn:
                 name, ext = os.path.splitext(f)
                 if ext == ".ods":  # xls or xlsx for windows
                     count += 1
-                    self.storeDataInDictionary(os.path.join(dp, f), f)
-        counttxt = str(count)
-        fold = wx.StaticText(self, label=chosendirectory, pos=(25, 200))
-        total = wx.StaticText(self, label=counttxt, pos=(25, 220))
-
-
-        for (dirpath, dirnames, filenames) in os.walk(chosendirectory):
-            for fn in filenames:
-                name, ext = os.path.splitext(fn)
+        wx.MessageBox("Aantal bestanden: \(count)", "Doorgaan?", wx.OK | wx.ICON_INFORMATION)
+        for (dp, dn, fn) in os.walk(chosendirectory):
+            for f in fn:
+                name, ext = os.path.splitext(f)
                 if ext == ".ods":  # xls or xlsx for windows
-                    print(fn)
-        print(chosenfolder)
-        print(count)
+                    self.storeDataInDictionary(os.path.join(dp, f), f)
+        #fold = wx.StaticText(self, label=chosendirectory, pos=(25, 200))
+        #total = wx.StaticText(self, label=counttxt, pos=(25, 220))
+        print("Gevonden: \(count)")
         return True
 
     def storeDataInDictionary(self, path, file):
         print("Reading from file: ", path)
-
         data = get_data(path)
         print(json.dumps(data))
+        data2 = get_data(file)
+        print(json.dumps(data2))
         self.dataDictionary[file] = json.dumps(data)
         print("Dictionary: ", self.dataDictionary)
 
