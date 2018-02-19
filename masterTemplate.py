@@ -2,14 +2,23 @@
 
 __author__ = 'pstragie'
 __company__ = 'PWS'
+hostname = "latitude-e6520"
 
 import os
 import sys
+import socket
+
+print(socket.gethostname())
+if socket.gethostname() != hostname:
+    print("Wrong hostname!")
+else:
+    print("Correct hostname!")
 import wx
 import wx.lib.scrolledpanel
 from countFiles import CountFiles
 from checkWebsiteUpdate import CheckForUpdates
 from runFromFile import RunFromFile
+from reportFromExcel import ReadFromExcel
 clientCompany = "Ipsum Lorem"
 
 class MasterFrame(wx.Frame):
@@ -25,15 +34,18 @@ class MasterFrame(wx.Frame):
         self.panel_two = CountFiles(self)
         self.panel_three = CheckForUpdates(self)
         self.panel_four = RunFromFile(self)
+        self.panel_five = ReadFromExcel(self)
         self.panel_two.Hide()
         self.panel_three.Hide()
         self.panel_four.Hide()
+        self.panel_five.Hide()
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.panel_home, 1, wx.EXPAND)
         self.sizer.Add(self.panel_two, 1, wx.EXPAND)
         self.sizer.Add(self.panel_three, 1, wx.EXPAND)
         self.sizer.Add(self.panel_four, 1, wx.EXPAND)
+        self.sizer.Add(self.panel_five, 1, wx.EXPAND)
         self.SetSizer(self.sizer)
 
         self.SetTitle("PWS digital solutions")
@@ -67,6 +79,7 @@ class MasterFrame(wx.Frame):
         scriptMenu = wx.Menu()
         countFiles = scriptMenu.Append(-1, "&countFiles...\tCtrl-1", "count files in folder")
         checkWebsiteUpdate = scriptMenu.Append(-1, "&checkSiteUpdate...\tCtrl-2", "check for website update")
+        summaryFromOds = scriptMenu.Append(-1, "&summaryFromOds...\tCtrl-3", "make report from multiple ods files")
         scriptMenu.AppendSeparator()
         runFromFile = scriptMenu.Append(-1, "&runFromFile...\tCtrl-R", "run a script from a file")
 
@@ -94,6 +107,7 @@ class MasterFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
         self.Bind(wx.EVT_MENU, self.onCountFiles, countFiles)
         self.Bind(wx.EVT_MENU, self.onCheckWebsiteUpdate, checkWebsiteUpdate)
+        self.Bind(wx.EVT_MENU, self.onSummaryFromOds, summaryFromOds)
         self.Bind(wx.EVT_MENU, self.onRunFromFile, runFromFile)
 
 
@@ -109,6 +123,7 @@ class MasterFrame(wx.Frame):
         self.panel_two.Hide()
         self.panel_three.Hide()
         self.panel_four.Hide()
+        self.panel_five.Hide()
         self.Layout()
 
     def OnAbout(self, event):
@@ -122,6 +137,7 @@ class MasterFrame(wx.Frame):
         self.panel_two.Show()
         self.panel_three.Hide()
         self.panel_four.Hide()
+        self.panel_five.Hide()
         self.Layout()
 
     def onCheckWebsiteUpdate(self, event):
@@ -131,7 +147,17 @@ class MasterFrame(wx.Frame):
         self.panel_two.Hide()
         self.panel_three.Show()
         self.panel_four.Hide()
+        self.panel_five.Hide()
         self.Layout()
+
+    def onSummaryFromOds(self, event):
+        """Show report from ods files panel"""
+        self.SetStatusText("Make report from ods files")
+        self.panel_home.Hide()
+        self.panel_two.Hide()
+        self.panel_three.Hide()
+        self.panel_four.Hide()
+        self.panel_five.Show()
 
     def onRunFromFile(self, event):
         """Show checkwebsiteupdate script panel"""
@@ -140,6 +166,7 @@ class MasterFrame(wx.Frame):
         self.panel_two.Hide()
         self.panel_three.Hide()
         self.panel_four.Show()
+        self.panel_five.Hide()
         self.Layout()
 
 class MasterPanel(wx.Panel):
