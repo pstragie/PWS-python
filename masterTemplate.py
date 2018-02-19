@@ -18,7 +18,7 @@ import wx.lib.scrolledpanel
 from countFiles import CountFiles
 from checkWebsiteUpdate import CheckForUpdates
 from runFromFile import RunFromFile
-from reportFromExcel import ReadFromExcel
+from reportFromOds import ReadFromOds
 clientCompany = "Ipsum Lorem"
 
 class MasterFrame(wx.Frame):
@@ -34,7 +34,7 @@ class MasterFrame(wx.Frame):
         self.panel_two = CountFiles(self)
         self.panel_three = CheckForUpdates(self)
         self.panel_four = RunFromFile(self)
-        self.panel_five = ReadFromExcel(self)
+        self.panel_five = ReadFromOds(self)
         self.panel_two.Hide()
         self.panel_three.Hide()
         self.panel_four.Hide()
@@ -158,6 +158,7 @@ class MasterFrame(wx.Frame):
         self.panel_three.Hide()
         self.panel_four.Hide()
         self.panel_five.Show()
+        self.Layout()
 
     def onRunFromFile(self, event):
         """Show checkwebsiteupdate script panel"""
